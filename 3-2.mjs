@@ -2,20 +2,17 @@ import fs from 'fs';
 
 const array = fs.readFileSync('3.input.txt').toString().split("\n")
 
-//console.log({readline})
-
 function doIt(down, across) {
-
-	var pos = 0
-	var count = 0
-	;
-	array.forEach((line, index) => {
-		if ((index % down) != 0) return;
-		if (line[pos % line.length] === '#') count++;
-		pos += across
-	})
-	console.log({count})
-	return count
+	const result = array
+		.filter((line, index) => (index % down) === 0)
+		.reduce((memo, line) => {
+			if (line[memo.pos % line.length] === '#')
+				memo.count++;
+			memo.pos += across
+			return memo
+		}, {pos:0, count:0})
+	console.log('count', result.count)
+	return result.count
 }
 
 console.log("Part1", doIt(1,3))
