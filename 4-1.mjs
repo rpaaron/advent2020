@@ -53,11 +53,12 @@ const passports = fs.readFileSync('4.input.txt').toString().split("\n\n")
 	.map(line => line.split(/\n| /).reduce(lineToObj, {}))
 
 console.log('Total', passports.length)
-console.log('Part1', passports.filter(fieldsPresent).length)
+const part1Passports = passports.filter(fieldsPresent)
+console.log('Part1', part1Passports.length)
 // 128 too high, 127 is the answer, but why?
-const part2Passports = passports.filter(fieldsPresent).filter(isValid)
+const part2Passports = part1Passports.filter(isValid)
 console.log('Part2', part2Passports.length)
-//console.dir(passports, {'maxArrayLength': null}) //.filter(extraFields))
+//console.dir(part1Passports, {'maxArrayLength': null}) //.filter(extraFields))
 
 //console.dir(part2Passports, {'maxArrayLength': null})
 //console.dir(part2Passports.map(obj => obj.byr).sort(), {'maxArrayLength': null})
