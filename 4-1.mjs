@@ -44,9 +44,9 @@ const isValid = (pass) =>
 	(pass.iyr >= 2010) && pass.iyr <= 2020 &&
 	(pass.eyr >= 2020) && pass.eyr <= 2030 &&
 	validHeight(pass.hgt) &&
-	(/#[0-9a-f]{6}$/.test(pass.hcl)) &&
+	(/^#[0-9a-f]{6}$/.test(pass.hcl)) &&
 	eyecolor.includes(pass.ecl) &&
-	/[0-9]{9}$/.test(pass.pid)
+	/^[0-9]{9}$/.test(pass.pid)
 
 
 const passports = fs.readFileSync('4.input.txt').toString().split("\n\n")
@@ -55,7 +55,6 @@ const passports = fs.readFileSync('4.input.txt').toString().split("\n\n")
 console.log('Total', passports.length)
 const part1Passports = passports.filter(fieldsPresent)
 console.log('Part1', part1Passports.length)
-// 128 too high, 127 is the answer, but why?
 const part2Passports = part1Passports.filter(isValid)
 console.log('Part2', part2Passports.length)
 //console.dir(part1Passports, {'maxArrayLength': null}) //.filter(extraFields))
