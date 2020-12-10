@@ -20,16 +20,16 @@ const toSeatNum = seat => {
 	return obj
 }
 
-seats.forEach(seat => {
-	console.log('seat', seat, toSeatNum(seat))
-})
+//seats.forEach(seat => {
+//	console.log('seat', seat, toSeatNum(seat))
+//})
 
 
 const seatObjs = seats.map(toSeatNum)
-console.log('Part1', seatObjs.reduce((memo, seat) => seat.seat > memo.seat ? seat : memo, {seat: 0}))
+console.log('Part1', seatObjs.reduce((memo, seat) => seat.seat > memo.seat ? seat : memo, {seat: 0}).seat)
 
-console.log(seatObjs.sort((a,b) => a.seat < b.seat ? -1 : 1))
+//console.log(seatObjs.sort((a,b) => a.seat < b.seat ? -1 : 1))
 console.log('Part2', seatObjs.filter((seat) => {
 	return !seatObjs.find(s => s.seat === seat.seat + 1) &&
 	       seatObjs.find(s => s.seat === seat.seat + 2)
-}))
+})[0].seat + 1)
