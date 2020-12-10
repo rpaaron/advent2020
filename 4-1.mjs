@@ -39,15 +39,19 @@ const validHeight = (height) => {
 	return false
 }
 
-const isValid = (pass) =>
-	(pass.byr >= 1920) && pass.byr <= 2002 &&
-	(pass.iyr >= 2010) && pass.iyr <= 2020 &&
-	(pass.eyr >= 2020) && pass.eyr <= 2030 &&
-	validHeight(pass.hgt) &&
-	(/^#[0-9a-f]{6}$/.test(pass.hcl)) &&
-	eyecolor.includes(pass.ecl) &&
-	/^[0-9]{9}$/.test(pass.pid)
+const validator = {
+	'byr': val => (val >= 1920) && (val <= 2002),
+	'iyr': val => (val >= 2010) && (val <= 2020),
+	'eyr': val => (val >= 2020) && (val <= 2030),
+	'hgt': validHeight,
+	'hcl': val => /^#[0-9a-f]{6}$/.test(val),
+	'ecl': val => eyecolor.includes(val),
+	'pid': val => /^[0-9]{9}$/.test(val),
+	'cid': val => true
+}
 
+const isValid = (pass) =>
+	Object.keys(validator).every(key => validator[key](pass[key]))
 
 const passports = fs.readFileSync('4.input.txt').toString().split("\n\n")
 	.map(line => line.split(/\n| /).reduce(lineToObj, {}))
