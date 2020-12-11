@@ -1,8 +1,9 @@
 import fs from 'fs';
 
-const first_instructions = fs.readFileSync('8.input.txt').toString().split("\n")
+const lineToInstruction = line => ((([ins, val]) => ({ins, val}))(line.split(' ')))
+
+const lines = fs.readFileSync('8.input.txt').toString().split("\n")
 	.filter(line => line.length > 0)
-	.map(line => ((([ins, val]) => ({ins, val}))(line.split(' '))))
 
 function execute(instructions, terminate) {
 	const state = {
@@ -31,17 +32,24 @@ function execute(instructions, terminate) {
 				console.err(instruction)
 				throw {}
 		}
+		//console.log(instruction, state.acc)
 	}
 
 	return state;
 }
 
-console.log("Part1", execute(first_instructions, state => state.memo[state.pos]).acc)
+const isRecursive = state => state.memo[state.pos]
+console.log("Part1", execute(lines.map(lineToInstruction), isRecursive).acc)
 
-//const alternatives = first_instructions.reduce((memo, instr, idx) => {
-//	if (instr === 'jmp') {
-//		first_instructions[idx]
-//	}
-//	return memo
-//}, [first_instructions])
-//console.log({acc})
+lines.forEach((line, idx) => {
+	if (['jmp', 'nop'].includes(lineToInstruction(line).ins)) {
+		const instructions = lines.map(lineToInstruction)
+		instructions[idx].ins = instructions[idx].ins === 'jmp' ? 'nop' : 'jmp'
+		const result = execute(instructions, state => isRecursive(state) || state.pos >= instructions.length || state.pos < 0)
+		if (result.pos === instructions.length) {
+			console.log("Part2", result.acc)
+		} else {
+			//console.log("Ended")
+		}
+	}
+})
