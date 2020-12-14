@@ -89,7 +89,7 @@ function go (depth, count) {
 	do {
 		var answer = cycle(current, depth, count)
 		current = answer.newLayout
-		print(current)
+		//print(current)
 	} while ((answer.mutateCount > 0))
 	return answer
 }
