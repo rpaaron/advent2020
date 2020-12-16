@@ -9,8 +9,8 @@ const nearby_tickets = lines_nearby_tickets
 
 const rules = lines_rules
 	.split('\n')
-	.map(line => line.split(' '))
-	.map(([klass, rangeA, _or, rangeB]) =>({klass, rangeA, rangeB}))
+	.map(line => line.split(':'))
+	.map(([klass, ranges]) => (([rangeA, rangeB]) => ({klass, rangeA, rangeB}))(ranges.split(' or ')))
 
 
 function between_range(range, value) {
@@ -35,5 +35,6 @@ const invalid_numbers = nearby_tickets.reduce((memo, ticket) => {
 console.log({rules})
 console.log({nearby_tickets})
 console.log({invalid_numbers})
+// 28884
 console.log('Part1', invalid_numbers.reduce((memo, value) => memo + value * 1, 0))
 
