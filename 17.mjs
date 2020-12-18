@@ -10,7 +10,7 @@ const initialCubes =
 		
 const activeCubes = initialCubes
 	.filter(c => c.p === '#')
-	.map(c => [c.x, c.y, c.z]) 
+	.map(c => [c.x, c.y, c.z, 0]) 
 
 const mutateCoord = (coord, idx, change) =>
 	coord.slice(0, idx).concat(coord[idx] + change).concat(coord.slice(idx+1))
