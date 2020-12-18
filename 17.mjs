@@ -110,20 +110,41 @@ const makeFilterDuplicates = function() {
 	return candidate => (db[candidate] ? false : db[candidate] = true)
 }
 
+const maxDimensions = (coords) => coords.reduce((memo, coord) => {
+	return coord.reduce((memo, item, idx) => {
+		if (item > memo.max[idx]) {
+			memo.max[idx] = item
+		}
+		if (item < memo.min[idx]) {
+			memo.min[idx] = item
+		}
+		return memo
+	}, memo)
+}, {min:[0,0,0,0], max:[0,0,0,0]})
+
 const evolve = (activeCubes) => {
+	console.log({a: 1})
 	const activeCubeMap = makeActiveCubeMap(activeCubes)
+	console.log({a: 2})
 	const isActive = makeIsActive(activeCubeMap)
+	console.log({a: 3})
 	const getActiveNeighborCount = makeActiveNeighborCount(activeCubeMap, isActive)
+	console.log({a: 4})
 	const evolvedActiveCubes = activeCubes.filter(cube => [2,3].includes(getActiveNeighborCount(makeNeighbors(cube))))
+	console.log({a: 5})
 	const inactiveCandidates = activeCubes.map(activeCube => makeNeighbors(activeCube).filter(neighbor => !isActive(neighbor))).flat().filter(makeFilterDuplicates())
-	console.log({inactiveCandidates})
-	console.log('count', inactiveCandidates.map(c => getActiveNeighborCount(makeNeighbors(c))))
+	console.log({a: 6})
+	console.log('icount', inactiveCandidates.length)
+	console.log('count', inactiveCandidates.map(c => makeNeighbors(c).length))
 	const newActiveCubes = inactiveCandidates.filter(candidate => getActiveNeighborCount(makeNeighbors(candidate)) == 3)
-	console.log(makeActiveCubeMap(newActiveCubes))
-	console.log({evolvedActiveCubes})
-	console.log({newActiveCubes})
+	console.log({a: 7})
+	//console.log(makeActiveCubeMap(newActiveCubes))
+	//console.log({evolvedActiveCubes})
+	//console.log({newActiveCubes})
 	const together = evolvedActiveCubes.concat(newActiveCubes)
+	console.log({a: 8})
 	console.log('new size', together.length)
+	console.log('max', maxDimensions(together))
 	return together
 }
 
