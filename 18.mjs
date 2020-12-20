@@ -30,13 +30,19 @@ const calc = line => lineToTokens(line).reduce((memo, token) => {
 	return memo
 }, {t:0, op:'+'}).t
 
+const part2 = line => {
+	for (var i = 0; i < 20; i++)
+		line = line.replace(/[0-9]+(\ \+\ )[0-9]+/g, calc)
+	return calc(line)
+}
+
 const calcs = lines.map(line => {
 	console.log({line})
 	for (var i = 0; i < 20; i++)
-		line = line.replace(/\([^\()]*\)/, calc)
-	return calc(line)
+		line = line.replace(/\([^\()]*\)/, part2)
+	return part2(line)
 })
 
 
 console.log({calcs})
-console.log('Part1', calcs.reduce((memo, n) => memo + n * 1, 0))
+console.log('Part2', calcs.reduce((memo, n) => memo + n * 1, 0))
