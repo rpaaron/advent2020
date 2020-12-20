@@ -1,30 +1,26 @@
 import fs from 'fs';
 
-const lines = fs.readFileSync('18.input.sample2.txt').toString()
+const lines = fs.readFileSync('18.input.txt').toString()
 	.split("\n")
-	.filter(x => x)
 
-
-//const lineToTokens = line =>
-//	line[0] === '('
-//		? (line.slice(1, -1)).split(' ')
-//		: line.split(' ')
-
-const partsToToken = ([op, val]) => val === undefined
-	? ({op: '+', val: Number.parseInt(op)}) // leading value
-	: ({op, val: Number.parseInt(val)})
 
 const lineToTokens = line =>
-	line.match(/([+*]\ |)[0-9]+/g).map(part => partsToToken(part.split(' ')))
-	.sort((t1, t2) => t1.op === '+' ? -1 : 1)
-	
+	line[0] === '('
+		? (line.slice(1, -1)).split(' ')
+		: line.split(' ')
 
 const calc = line => lineToTokens(line).reduce((memo, token) => {
 	//console.log({token})
-	if (token.op === '*')
-		memo = memo * token.val
-	else if (token.op === '+')
-		memo += token.val
+	if (['*', '+'].includes(token)) {
+		memo.op = token
+	}
+	else
+	if (Number.isInteger(token *1)) {
+		if (memo.op === '*')
+			memo.t = memo.t * token
+		if (memo.op === '+')
+			memo.t += (token *1)
+	}
 	else {
 		console.log('what', {token})
 		throw "unknown token"
@@ -32,7 +28,7 @@ const calc = line => lineToTokens(line).reduce((memo, token) => {
 
 	console.log({token, memo})
 	return memo
-}, 0)
+}, {t:0, op:'+'}).t
 
 const calcs = lines.map(line => {
 	console.log({line})
