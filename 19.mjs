@@ -32,7 +32,7 @@ const replace = (rules, rule) =>
 		.join('')
 
 const expandRule = (rules) => rule => {
-	console.log({rule}, expanded(rule))
+	//console.log({rule}, expanded(rule))
 	return expanded(rule) 
 		? Array.from(rule).filter(l => /[a-z|\(\)]+/.test(l)).join('')
 		: rule.includes(' | ')
@@ -48,3 +48,14 @@ const regex = RegExp("^" + theRule + "$")
 console.log({theRule})
 const part1 = input.reduce((memo, line) => (console.log(line, memo+= regex.test(line)), memo), 0)
 console.log({part1})
+
+
+const rule42 = expandRule(rules)("42")
+const rule31 = expandRule(rules)("31")
+const rule11 = times => `${rule42}{${times}}${rule31}{${times}}` 
+const theRule2 = `${rule42}+(${rule11(1)}|${rule11(2)}|${rule11(3)}|${rule11(4)})`
+console.log({theRule2})
+const regex2 = RegExp("^" + theRule2 + "$")
+const part2 = input.reduce((memo, line) => (console.log(line, memo+= regex2.test(line)), memo), 0)
+console.log({part2})
+//242 too low
