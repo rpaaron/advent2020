@@ -24,13 +24,39 @@ function winround([winner, loser]) {
 	winner.push(loser.shift())
 }
 
-while (p1.length && p2.length) {
-	console.log({p1, p2})
-	winround(p1[0] > p2[0] ? [p1, p2] : [p2, p1])
+const makekey = (a1, a2) => [...a1, '|', ...a2]
 
+var nextgame=0
+function isPlayer1WinnerOfGame(p1, p2) {
+	const gameCache = {}
+	const game = ++nextgame
+	var round = 0
+	console.log("Game", game)
+	while (p1.length && p2.length) {
+		round++
+		//console.log(`Round ${round} (Game ${game})` ,{p1, p2})
+		if (gameCache[makekey(p1, p2)]) {
+			//console.log('Infinate recursion', 'Player 1 wins!')
+			//console.log({gameCache})
+			return true
+		}
+		gameCache[makekey(p1, p2)] = true
+		if (p1[0] < p1.length  && p2[0] < p2.length) { // recurse
+			winround(isPlayer1WinnerOfGame(p1.slice(1, p1[0] + 1), p2.slice(1, p2[0] + 1)) ? [p1, p2] : [p2, p1])
+		} else
+		{
+			//console.log('w1', {p1, p2})
+			winround(p1[0] > p2[0] ? [p1, p2] : [p2, p1])
+			//console.log('w2', {p1, p2})
+		}
+
+	}
+	return p2.length === 0
 }
 
-
+// Part1 32856
+// Part2 34027 too high
+console.log("Winner is", isPlayer1WinnerOfGame(p1, p2) ? "Player 1" : "Player 2")
 console.log({p1, p2})
 console.log('p1', score(p1))
 console.log('p2', score(p2))
