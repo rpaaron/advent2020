@@ -36,20 +36,15 @@ function isPlayer1WinnerOfGame(p1, p2) {
 		round++
 		//console.log(`Round ${round} (Game ${game})` ,{p1, p2})
 		if (gameCache[makekey(p1, p2)]) {
-			//console.log('Infinate recursion', 'Player 1 wins!')
-			//console.log({gameCache})
 			return true
 		}
 		gameCache[makekey(p1, p2)] = true
-		if (p1[0] < p1.length  && p2[0] < p2.length) { // recurse
-			winround(isPlayer1WinnerOfGame(p1.slice(1, p1[0] + 1), p2.slice(1, p2[0] + 1)) ? [p1, p2] : [p2, p1])
-		} else
-		{
-			//console.log('w1', {p1, p2})
-			winround(p1[0] > p2[0] ? [p1, p2] : [p2, p1])
-			//console.log('w2', {p1, p2})
-		}
 
+		const player1IsWinner = (p1[0] < p1.length  && p2[0] < p2.length)
+			? isPlayer1WinnerOfGame(p1.slice(1, p1[0] + 1), p2.slice(1, p2[0] + 1))
+			: p1[0] > p2[0]
+
+		winround(player1IsWinner ? [p1, p2] : [p2, p1])
 	}
 	return p2.length === 0
 }
