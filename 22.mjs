@@ -19,38 +19,38 @@ const mul = (memo, item) => memo * item
 
 const score = cards => cards.reverse().reduce((memo, card, idx) => memo + card * (idx + 1), 0)
 
-function winround([winner, loser]) {
-	winner.push(winner.shift())
-	winner.push(loser.shift())
-}
-
-const makekey = (a1, a2) => [...a1, '|', ...a2]
+const makekey = (a1, a2) => a1.toString() + '|' + a2.toString()
 
 var nextgame=0
 function isPlayer1WinnerOfGame(p1, p2) {
 	const gameCache = {}
 	const game = ++nextgame
 	var round = 0
-	console.log("Game", game)
+	//console.log("Game", game)
 	while (p1.length && p2.length) {
 		round++
 		//console.log(`Round ${round} (Game ${game})` ,{p1, p2})
-		if (gameCache[makekey(p1, p2)]) {
+		const key = makekey(p1, p2)
+		if (gameCache[key]) {
 			return true
 		}
-		gameCache[makekey(p1, p2)] = true
+		gameCache[key] = true
 
-		const player1IsWinner = (p1[0] < p1.length  && p2[0] < p2.length)
-			? isPlayer1WinnerOfGame(p1.slice(1, p1[0] + 1), p2.slice(1, p2[0] + 1))
-			: p1[0] > p2[0]
+		const c1 = p1.shift()
+		const c2 = p2.shift()
+		const player1IsWinner = (c1 <= p1.length  && c2 <= p2.length)
+			? isPlayer1WinnerOfGame(p1.slice(0, c1), p2.slice(0, c2))
+			: c1 > c2
 
-		winround(player1IsWinner ? [p1, p2] : [p2, p1])
+		player1IsWinner
+			? p1.push(c1, c2)
+			: p2.push(c2, c1)
 	}
 	return p2.length === 0
 }
 
 // Part1 32856
-// Part2 34027 too high
+// Part2 33805
 console.log("Winner is", isPlayer1WinnerOfGame(p1, p2) ? "Player 1" : "Player 2")
 console.log({p1, p2})
 console.log('p1', score(p1))
